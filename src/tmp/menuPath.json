@@ -1,0 +1,22 @@
+{
+    "resultData": [
+        {
+            "menuName": "userInfomation",
+            "menuComponent": "UserInfomation",
+            "menuGroup": "userInfomation",
+            "menuPath": "/userInfomation"
+        },
+        {
+            "menuName": "products",
+            "menuComponent": "Products",
+            "menuGroup": "products",
+            "menuPath": "/products"
+        },
+        {
+            "menuName": "showData",
+            "menuComponent": "ShowData",
+            "menuGroup": "userInfomation",
+            "menuPath": "/showData"
+        }
+    ]
+}

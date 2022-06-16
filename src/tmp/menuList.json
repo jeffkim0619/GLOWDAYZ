@@ -1,0 +1,26 @@
+{
+  "resultData": [
+    {
+      "label": "GLOWDAYZ",
+      "icon": "pi pi-money-bill",
+      "to": null,
+      "headerNm": null,
+      "items": [
+        {
+          "label": "사용자 정보 입력",
+          "icon": null,
+          "to": "/userInfomation",
+          "headerNm": "GLOWDAYZ > 사용자 정보 입력",
+          "items": null
+        },
+        {
+          "label": "제품검색",
+          "icon": null,
+          "to": "/products",
+          "headerNm": "GLOWDAYZ > 제품 검색",
+          "items": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "name": "GLOWDAYZ",
+  "version": "1.0.0",
+  "description": "Online Test",
+  "author": {
+    "name": "Jeffkim",
+    "email": "kangjunne@naver.com"
+  },
+  "scripts": {
+    "dev": "vite --mode development",
+    "build": "vite build --mode development",
+    "preview": "vite preview"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "bignumber.js": "^9.0.2",
+    "chart.js": "3.3.2",
+    "core-js": "^3.6.5",
+    "cron": "^2.0.0",
+    "ethers": "^5.6.6",
+    "primeflex": "^3.1.2",
+    "primeicons": "^5.0.0",
+    "primevue": "^3.10.0",
+    "prismjs": "1.9.0",
+    "vue": "3.2.25",
+    "vue-daum-postcode": "^1.1.0",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0",
+    "x2js": "^3.4.3",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.3.1",
+    "vite": "^2.9.7",
+    "vite-plugin-inspect": "^0.3.15",
+    "autoprefixer": "^10.3.7",
+    "axios": "^0.25.0",
+    "babel-eslint": "^10.1.0",
+    "chart.js": "^3.7.0",
+    "core-js": "^3.20.3",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-vue": "^7.20.0",
+    "prettier": "^2.4.1",
+    "sass": "^1.49.9",
+    "sass-loader": "^12.4.0"
+  }
+}
