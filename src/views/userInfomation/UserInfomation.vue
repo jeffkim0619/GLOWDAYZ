@@ -2,7 +2,6 @@
   <div class="card">
     <div class="card card-w-title">
       <div>
-        <Toast />
         <div class="card">
           <Steps :model="items" :readonly="true" />
         </div>
@@ -25,8 +24,8 @@
     <Dialog
       header="최종입력 사항"
       v-model:visible="display"
-      :breakpoints="{ '1080px': '75vw', '720px': '100vw' }"
-      :style="{ width: '30vw' }"
+      :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
+      :style="{ width: '20vw' }"
       :modal="true"
       class=""
       :dismissableMask="true"
@@ -39,7 +38,6 @@
 <script>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useToast } from "primevue/usetoast";
 import Detail from "@/views/userInfomation/info/UserDetail.vue";
 import Address from "@/views/userInfomation/info/UserAddress.vue";
 import Payment from "@/views/userInfomation/info/UserCard.vue";
@@ -51,7 +49,6 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const toast = useToast();
     const display = ref(false);
     const items = ref([
       {
@@ -67,29 +64,23 @@ export default {
         to: "/userInfomation/card",
       },
     ]);
-    const formObject = ref({});
+    let formObject = {};
 
     const nextPage = (event) => {
       for (let field in event.formData) {
-        formObject.value[field] = event.formData[field];
-        console.log(formObject.value[field]);
+        formObject[field] = event.formData[field];
+        console.log(formObject[field]);
       }
       router.push(items.value[event.pageIndex + 1].to);
     };
     const prevPage = (event) => {
       router.push(items.value[event.pageIndex - 1].to);
     };
-    const complete = () => {
-      toast.add({
-        severity: "success",
-        summary: "Order submitted",
-        detail:
-          "Dear, " +
-          formObject.value.firstname +
-          " " +
-          formObject.value.lastname +
-          " your order completed.",
-      });
+    const complete = (event) => {
+      for (let field in event.formData) {
+        formObject[field] = event.formData[field];
+      }
+      console.log(JSON.stringify(formObject, null, 4));
       display.value = true;
     };
 

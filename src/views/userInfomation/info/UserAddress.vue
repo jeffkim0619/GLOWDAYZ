@@ -99,9 +99,11 @@ export default {
     const nextPage = () => {
       emit("next-page", {
         formData: {
-          address: address.value,
-          postal: postal.value,
-          detailAddress:detailAddress.value
+          address: {
+            addr1: address.value,
+            addr2: detailAddress.value,
+            postal: postal.value,
+          },
         },
         pageIndex: 1,
       });

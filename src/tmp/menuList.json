@@ -9,7 +9,7 @@
         {
           "label": "사용자 정보 입력",
           "icon": null,
-          "to": "/userInfomation",
+          "to": "/userInfomation/detail",
           "headerNm": "GLOWDAYZ > 사용자 정보 입력",
           "items": null
         },

@@ -17,8 +17,8 @@
     <div class="grid grid-nogutter justify-content-between">
       <Button label="Back" @click="prevPage()" icon="pi pi-angle-left"></Button>
       <Button
-        label="Next"
-        @click="nextPage()"
+        label="Complete"
+        @click="complete()"
         icon="pi pi-angle-right"
         icon-pos="right"
       ></Button>
@@ -30,7 +30,7 @@
 <script>
 import { getCurrentInstance, ref } from "vue";
 export default {
-  emits: ["next-page", "prev-page"],
+  emits: ["next-page", "complete"],
   setup() {
     const { emit } = getCurrentInstance();
     const cardNum = ref("");
@@ -44,14 +44,18 @@ export default {
         pageIndex: 2,
       });
     };
-    const prevPage = () => {
-      emit("prev-page", { pageIndex: 2 });
+    const complete = () => {
+      emit("complete", {
+        formData: {
+          creditNumber:cardNum.value
+        }
+      });
     };
 
     return {
       cardNum,
       nextPage,
-      prevPage,
+      complete,
     };
   },
 };
