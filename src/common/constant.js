@@ -9,6 +9,10 @@ export default {
         MENULIST: 'menu_list',
         MENUPATH: 'menu_path',
     },
+    errorMsg:{
+        NODATA:'모든 입력 항목은 비어 있을 수 없습니다.',
+        NAMEERROR:'이름은 두글자 이상의 문자열 입니다.',
+    },
     store: {
         theme: {
             SET_THEME: 'theme/changeTheme',

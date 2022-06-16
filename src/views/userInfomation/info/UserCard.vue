@@ -30,19 +30,14 @@
 <script>
 import { getCurrentInstance, ref } from "vue";
 export default {
-  emits: ["next-page", "complete"],
+  emits: ["prev-page", "complete"],
   setup() {
     const { emit } = getCurrentInstance();
     const cardNum = ref("");
 
     //페이지 이동
-    const nextPage = () => {
-      emit("next-page", {
-        formData: {
-          cardNum: cardNum.value,
-        },
-        pageIndex: 2,
-      });
+    const prevPage = () => {
+      emit("prev-page", { pageIndex: 2 });
     };
     const complete = () => {
       emit("complete", {
@@ -54,7 +49,7 @@ export default {
 
     return {
       cardNum,
-      nextPage,
+      prevPage,
       complete,
     };
   },
