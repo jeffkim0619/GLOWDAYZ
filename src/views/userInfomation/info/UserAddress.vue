@@ -7,6 +7,7 @@
           <InputText
             placeholder="우편번호"
             :modelValue="postal"
+            :class="[{ 'p-invalid': isNosearch }]"
             :readonly="true"
           />
           <Button
@@ -22,6 +23,7 @@
             placeholder="주소"
             :modelValue="address"
             class="w-full"
+            :class="[{ 'p-invalid': isNosearch }]"
             :readonly="true"
           />
         </div>
@@ -32,6 +34,7 @@
             placeholder="상세주소"
             v-model:modelValue="detailAddress"
             class="w-full"
+            :class="[{ 'p-invalid': isNoDetail }]"
           />
         </div>
         <!-- 상세주소 -->
@@ -69,6 +72,7 @@
 <script>
 import { getCurrentInstance, ref } from "vue";
 import { VueDaumPostcode } from "vue-daum-postcode";
+import constant from "@/common/constant.js";
 export default {
   components: {
     VueDaumPostcode,
@@ -79,7 +83,10 @@ export default {
     const display = ref(false);
     const address = ref("");
     const postal = ref("");
+    const isNosearch = ref(false);
     const detailAddress = ref("");
+    const isNoDetail = ref(false);
+    const errorMsg = ref("");
     const searchAddress = () => {
       display.value = true;
       console.log("test");
@@ -94,9 +101,11 @@ export default {
       postal.value = response.zonecode;
       display.value = false;
     };
-
     //페이지 이동
     const nextPage = () => {
+      if (!checkValidation()) {
+        return;
+      }
       emit("next-page", {
         formData: {
           address: {
@@ -111,15 +120,32 @@ export default {
     const prevPage = () => {
       emit("prev-page", { pageIndex: 1 });
     };
+    const checkValidation = () => {
+      //   if (address.value === "" || postal.value === "") {
+      //     isNosearch.value = true;
+      //     isNoDetail.value = false;
+      // errorMsg.value = constant.errorMsg.NODATA;
+      //     return false;
+      //   } else if (detailAddress.value === "") {
+      //     isNosearch.value = false;
+      //     isNoDetail.value = true;
+      // errorMsg.value = constant.errorMsg.NODATA;
+      //     return false;
+      //   }
+      return true;
+    };
     return {
+      address,
+      display,
+      detailAddress,
+      errorMsg,
+      isNosearch,
+      isNoDetail,
+      postal,
       searchAddress,
       oncomplete,
-      display,
       nextPage,
       prevPage,
-      address,
-      postal,
-      detailAddress,
     };
   },
 };

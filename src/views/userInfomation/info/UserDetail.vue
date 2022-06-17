@@ -118,56 +118,56 @@ export default {
     };
     const checkValidation = () => {
       //정규식 정리
-      const reg_name = /^[가-힣a-zA-Z]+$/;
-      const reg_phone = /^01([0-9][-\s])?([0-9]{3,4})([-\s])?([0-9]{4})$/;
-      const reg_num = /^[0-9]+$/;
-      const reg_email =
-        /^[0-9a-zA-Z]([\W]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-      let phoneNum = phone.value.replace(/-/gi, "");
-      phoneNum = phoneNum.replace(/ /gi, "");
-      if (name.value.trim() === "") {
-        isNameError.value = true;
-        textError.value = true;
-        isPhoneError.value = false;
-        isMailError.value = false;
-        errorMsg.value = constant.errorMsg.NODATA;
-        name.value = "";
-        return false;
-      } else if (name.value.length < 3 || !reg_name.test(name.value)) {
-        isNameError.value = true;
-        textError.value = true;
-        isPhoneError.value = false;
-        isMailError.value = false;
-        errorMsg.value = constant.errorMsg.NAMEERROR;
-        name.value = "";
-        return false;
-      } else if (phone.value.trim() === "") {
-        textError.value = false;
-        isNameError.value = false;
-        isMailError.value = false;
-        isPhoneError.value = true;
-        phone.value = "";
-        return false;
-      } else if (!reg_num.test(phoneNum) || phoneNum.length < 10 || phoneNum.length > 11 || !reg_phone.test(phone.value)) {
-        textError.value = false;
-        isNameError.value = false;
-        isMailError.value = false;
-        isPhoneError.value = true;
-        return false;
-      } else if (email.value.trim() === "") {
-        textError.value = false;
-        isNameError.value = false;
-        isPhoneError.value = false;
-        isMailError.value = true;
-        email.value = "";
-        return false;
-      } else if (!reg_email.test(email.value)) {
-        textError.value = false;
-        isNameError.value = false;
-        isPhoneError.value = false;
-        isMailError.value = true;
-        return false;
-      }
+      // const reg_name = /^[가-힣a-zA-Z]+$/;
+      // const reg_phone = /^01([0-9][-\s])?([0-9]{3,4})([-\s])?([0-9]{4})$/;
+      // const reg_num = /^[0-9]+$/;
+      // const reg_email =
+      //   /^[0-9a-zA-Z]([\W]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+      // let phoneNum = phone.value.replace(/-/gi, "");
+      // phoneNum = phoneNum.replace(/ /gi, "");
+      // if (name.value.trim() === "") {
+      //   isNameError.value = true;
+      //   textError.value = true;
+      //   isPhoneError.value = false;
+      //   isMailError.value = false;
+      //   errorMsg.value = constant.errorMsg.NODATA;
+      //   name.value = "";
+      //   return false;
+      // } else if (name.value.length < 3 || !reg_name.test(name.value)) {
+      //   isNameError.value = true;
+      //   textError.value = true;
+      //   isPhoneError.value = false;
+      //   isMailError.value = false;
+      //   errorMsg.value = constant.errorMsg.NAMEERROR;
+      //   name.value = "";
+      //   return false;
+      // } else if (phone.value.trim() === "") {
+      //   textError.value = false;
+      //   isNameError.value = false;
+      //   isMailError.value = false;
+      //   isPhoneError.value = true;
+      //   phone.value = "";
+      //   return false;
+      // } else if (!reg_num.test(phoneNum) || phoneNum.length < 10 || phoneNum.length > 11 || !reg_phone.test(phone.value)) {
+      //   textError.value = false;
+      //   isNameError.value = false;
+      //   isMailError.value = false;
+      //   isPhoneError.value = true;
+      //   return false;
+      // } else if (email.value.trim() === "") {
+      //   textError.value = false;
+      //   isNameError.value = false;
+      //   isPhoneError.value = false;
+      //   isMailError.value = true;
+      //   email.value = "";
+      //   return false;
+      // } else if (!reg_email.test(email.value)) {
+      //   textError.value = false;
+      //   isNameError.value = false;
+      //   isPhoneError.value = false;
+      //   isMailError.value = true;
+      //   return false;
+      // }
       return true;
     };
     return {

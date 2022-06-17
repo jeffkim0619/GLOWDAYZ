@@ -1,12 +1,8 @@
 export default {
     url: {
-        ONLOGIN: '/',
-        LOGINFAIL: '/#/signIn',
-        ONLOGOUT: '/signIn',
-        LOGIN: 'auth-api/login/manager?id=',
+        GETDATA:'test/app/products.json',
     },
     data: {
-        MENULIST: 'menu_list',
         MENUPATH: 'menu_path',
     },
     errorMsg:{
@@ -30,14 +26,6 @@ export default {
         },
         menuName: {
             CHECKONMENU: 'menuName/checkOnMenu',
-        },
-        dialog: {
-            CHANGEWHICH: 'dialog/changeWhich',
-            CHANGDISPLAY1: 'dialog/changeDispaly1',
-            CHANGDISPLAY2: 'dialog/changeDispaly2',
-            CHANGDISPLAY3: 'dialog/changeDispaly3',
-            SETMESSAGE: 'dialog/setConfirmMessage',
-            SETSENDDATAS: 'dialog/setSendDatas',
         },
     },
 

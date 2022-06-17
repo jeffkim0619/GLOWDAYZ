@@ -1,8 +1,6 @@
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 import constant from '@/common/constant.js';
-import api from '@/api/index.js';
-import { writeRoutes } from "@/common/dynamicRoute.js";
 
 export const activeClassName = () => {
     const store = useStore();
@@ -45,22 +43,6 @@ export const activeClassName = () => {
         changeMobileState,
         changeMenuOnclick,
         checkMenuOnclick
-    }
-}
-
-export const saveMenuList = () => {
-    const store = useStore();
-    const menuListData = computed(() => store.state.sideNav.menuList);
-    const getMenuList = async (mainNet) => {
-        await writeRoutes(mainNet);
-        const response = await api.get(constant.url.MENU_LIST + mainNet);
-        const menuList = await response.data.resultVO;
-        store.dispatch(constant.store.menulist.SETMENULIST, menuList);
-        // store.dispatch(constant.store.menuName.CHECKONMENU, '');
-    }
-    return {
-        getMenuList,
-        menuListData
     }
 }
 
