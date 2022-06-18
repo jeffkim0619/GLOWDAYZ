@@ -8,6 +8,7 @@
           <div class="col">
             <InputText
               v-model:modelValue="cardNum"
+              @keyup.enter="complete"
               class="w-full"
               :class="[{ 'p-invalid': isCardNmError }]"
             />

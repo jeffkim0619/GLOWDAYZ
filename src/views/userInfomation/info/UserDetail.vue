@@ -7,7 +7,9 @@
           <label for="name" class="col-fixed" style="width: 100px">Name</label>
           <div class="col">
             <InputText
+              id="name"
               v-model:modelValue="name"
+              @keyup.enter="moveFocus('phone')"
               class="w-full"
               :class="[{ 'p-invalid': isNameError }]"
             />
@@ -21,6 +23,8 @@
           >
           <div class="col">
             <InputText
+              id="phone"
+              @keyup.enter="moveFocus('email')"
               v-model:modelValue="phone"
               class="w-full"
               :class="[{ 'p-invalid': isPhoneError }]"
@@ -35,6 +39,8 @@
           >
           <div class="col">
             <InputText
+              id="email"
+              @keyup.enter="nextPage"
               v-model:modelValue="email"
               class="w-full"
               :class="[{ 'p-invalid': isMailError }]"
@@ -102,6 +108,25 @@ export default {
 
     const errorMsg = ref("");
 
+    //Enter 포인트 이동
+    const moveFocus = (next) => {
+      switch (next) {
+        case "phone":
+          if (checkName()) {
+            document.getElementById(next).focus();
+          }
+          break;
+        default:
+          if (checkPhone()) {
+            document.getElementById(next).focus();
+          }
+          break;
+      }
+      // if (checkName()) {
+      //   document.getElementById(next).focus();
+      // }
+    };
+
     //페이지 이동
     const nextPage = () => {
       //유효성 검증
@@ -127,18 +152,35 @@ export default {
     //유효성 검증
     const checkValidation = () => {
       //정규식 정리
-      const reg_name = /^[가-힣a-zA-Z]+$/;
-      const reg_phone =
-        /^01([0|1|2|3|4|5|6|7|8|9])([-\s])?([0-9]{3,4})([-\s])?([0-9]{4})$/;
-      const reg_num = /^[0-9]+$/;
       const reg_email =
         /^[0-9a-zA-Z]([\W]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
 
-      //핸드폰번호 하이픈 공백 제거
-      let phoneNum = phone.value.replace(/-/gi, "");
-      phoneNum = phoneNum.replace(/ /gi, "");
-
       //검증
+      if (!checkName()) {
+        return false;
+      } else if (!checkPhone()) {
+        return false;
+      } else if (email.value.trim() === "") {
+        textError.value = false;
+        isNameError.value = false;
+        isPhoneError.value = false;
+        isMailError.value = true;
+        email.value = "";
+        return false;
+      } else if (!reg_email.test(email.value)) {
+        textError.value = false;
+        isNameError.value = false;
+        isPhoneError.value = false;
+        isMailError.value = true;
+        email.value = "";
+        return false;
+      }
+      return true;
+    };
+
+    //이름 정규식 체크
+    const checkName = () => {
+      const reg_name = /^[가-힣a-zA-Z]+$/;
       if (name.value.trim() === "") {
         isNameError.value = true;
         textError.value = true;
@@ -155,7 +197,22 @@ export default {
         errorMsg.value = constant.errorMsg.NAMEERROR;
         name.value = "";
         return false;
-      } else if (phone.value.trim() === "") {
+      }
+      textError.value = false;
+      isNameError.value = false;
+      return true;
+    };
+
+    //핸드폰 정규식 체크
+    const checkPhone = () => {
+      const reg_phone =
+        /^01([0|1|2|3|4|5|6|7|8|9])([-\s])?([0-9]{3,4})([-\s])?([0-9]{4})$/;
+      const reg_num = /^[0-9]+$/;
+      //핸드폰번호 하이픈 공백 제거
+      let phoneNum = phone.value.replace(/-/gi, "");
+      phoneNum = phoneNum.replace(/ /gi, "");
+
+      if (phone.value.trim() === "") {
         textError.value = false;
         isNameError.value = false;
         isMailError.value = false;
@@ -172,21 +229,10 @@ export default {
         isNameError.value = false;
         isMailError.value = false;
         isPhoneError.value = true;
-        return false;
-      } else if (email.value.trim() === "") {
-        textError.value = false;
-        isNameError.value = false;
-        isPhoneError.value = false;
-        isMailError.value = true;
-        email.value = "";
-        return false;
-      } else if (!reg_email.test(email.value)) {
-        textError.value = false;
-        isNameError.value = false;
-        isPhoneError.value = false;
-        isMailError.value = true;
+        phone.value = "";
         return false;
       }
+      isPhoneError.value = false;
       return true;
     };
     return {
@@ -199,6 +245,7 @@ export default {
       isPhoneError,
       isMailError,
       nextPage,
+      moveFocus,
     };
   },
 };

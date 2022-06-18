@@ -32,6 +32,8 @@
         <div class="flex mt-3 align-items-center justify-content-start">
           <InputText
             placeholder="상세주소"
+            id="detail"
+            @keyup.enter="nextPage"
             v-model:modelValue="detailAddress"
             class="w-full"
             :class="[{ 'p-invalid': isNoDetail }]"
@@ -110,6 +112,7 @@ export default {
         address.value = response.jibunAddress;
       }
       postal.value = response.zonecode;
+      document.getElementById('detail').focus();
       display.value = false;
     };
 
