@@ -44,6 +44,7 @@
         <!-- 이메일 -->
       </div>
     </div>
+    <!-- Error -->
     <div class="flex mt-5 align-items-center justify-content-center">
       <span class="error-text" v-if="textError">{{ errorMsg }}</span>
       <div class="card error-text" v-else>
@@ -67,6 +68,7 @@
         </ul>
       </div>
     </div>
+    <!-- Error -->
     <!-- foot -->
     <div class="grid grid-nogutter justify-content-between">
       <i></i>
@@ -91,14 +93,18 @@ export default {
     const name = ref("");
     const textError = ref(true);
     const isNameError = ref(false);
+
     const phone = ref("");
     const isPhoneError = ref(false);
+
     const email = ref("");
     const isMailError = ref(false);
+
     const errorMsg = ref("");
 
     //페이지 이동
     const nextPage = () => {
+      //유효성 검증
       if (!checkValidation()) {
         return;
       }
@@ -110,71 +116,84 @@ export default {
         },
         pageIndex: 0,
       });
+      //정상일 경우 변수 리셋
       isNameError.value = false;
       isPhoneError.value = false;
       isMailError.value = false;
       textError.value = true;
       errorMsg.value = "";
     };
+
+    //유효성 검증
     const checkValidation = () => {
       //정규식 정리
-      // const reg_name = /^[가-힣a-zA-Z]+$/;
-      // const reg_phone = /^01([0-9][-\s])?([0-9]{3,4})([-\s])?([0-9]{4})$/;
-      // const reg_num = /^[0-9]+$/;
-      // const reg_email =
-      //   /^[0-9a-zA-Z]([\W]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-      // let phoneNum = phone.value.replace(/-/gi, "");
-      // phoneNum = phoneNum.replace(/ /gi, "");
-      // if (name.value.trim() === "") {
-      //   isNameError.value = true;
-      //   textError.value = true;
-      //   isPhoneError.value = false;
-      //   isMailError.value = false;
-      //   errorMsg.value = constant.errorMsg.NODATA;
-      //   name.value = "";
-      //   return false;
-      // } else if (name.value.length < 3 || !reg_name.test(name.value)) {
-      //   isNameError.value = true;
-      //   textError.value = true;
-      //   isPhoneError.value = false;
-      //   isMailError.value = false;
-      //   errorMsg.value = constant.errorMsg.NAMEERROR;
-      //   name.value = "";
-      //   return false;
-      // } else if (phone.value.trim() === "") {
-      //   textError.value = false;
-      //   isNameError.value = false;
-      //   isMailError.value = false;
-      //   isPhoneError.value = true;
-      //   phone.value = "";
-      //   return false;
-      // } else if (!reg_num.test(phoneNum) || phoneNum.length < 10 || phoneNum.length > 11 || !reg_phone.test(phone.value)) {
-      //   textError.value = false;
-      //   isNameError.value = false;
-      //   isMailError.value = false;
-      //   isPhoneError.value = true;
-      //   return false;
-      // } else if (email.value.trim() === "") {
-      //   textError.value = false;
-      //   isNameError.value = false;
-      //   isPhoneError.value = false;
-      //   isMailError.value = true;
-      //   email.value = "";
-      //   return false;
-      // } else if (!reg_email.test(email.value)) {
-      //   textError.value = false;
-      //   isNameError.value = false;
-      //   isPhoneError.value = false;
-      //   isMailError.value = true;
-      //   return false;
-      // }
+      const reg_name = /^[가-힣a-zA-Z]+$/;
+      const reg_phone =
+        /^01([0|1|2|3|4|5|6|7|8|9])([-\s])?([0-9]{3,4})([-\s])?([0-9]{4})$/;
+      const reg_num = /^[0-9]+$/;
+      const reg_email =
+        /^[0-9a-zA-Z]([\W]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+      //핸드폰번호 하이픈 공백 제거
+      let phoneNum = phone.value.replace(/-/gi, "");
+      phoneNum = phoneNum.replace(/ /gi, "");
+
+      //검증
+      if (name.value.trim() === "") {
+        isNameError.value = true;
+        textError.value = true;
+        isPhoneError.value = false;
+        isMailError.value = false;
+        errorMsg.value = constant.errorMsg.NODATA;
+        name.value = "";
+        return false;
+      } else if (name.value.length < 3 || !reg_name.test(name.value)) {
+        isNameError.value = true;
+        textError.value = true;
+        isPhoneError.value = false;
+        isMailError.value = false;
+        errorMsg.value = constant.errorMsg.NAMEERROR;
+        name.value = "";
+        return false;
+      } else if (phone.value.trim() === "") {
+        textError.value = false;
+        isNameError.value = false;
+        isMailError.value = false;
+        isPhoneError.value = true;
+        phone.value = "";
+        return false;
+      } else if (
+        !reg_phone.test(phone.value) ||
+        !reg_num.test(phoneNum) ||
+        phoneNum.length < 10 ||
+        phoneNum.length > 11
+      ) {
+        textError.value = false;
+        isNameError.value = false;
+        isMailError.value = false;
+        isPhoneError.value = true;
+        return false;
+      } else if (email.value.trim() === "") {
+        textError.value = false;
+        isNameError.value = false;
+        isPhoneError.value = false;
+        isMailError.value = true;
+        email.value = "";
+        return false;
+      } else if (!reg_email.test(email.value)) {
+        textError.value = false;
+        isNameError.value = false;
+        isPhoneError.value = false;
+        isMailError.value = true;
+        return false;
+      }
       return true;
     };
     return {
-      name,
-      phone,
       email,
       errorMsg,
+      name,
+      phone,
       textError,
       isNameError,
       isPhoneError,

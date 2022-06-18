@@ -40,6 +40,11 @@
         <!-- 상세주소 -->
       </div>
     </div>
+    <!-- Error -->
+    <div class="flex mt-5 align-items-center justify-content-center">
+      <span class="error-text" v-if="isEmpty">{{ errorMsg }}</span>
+    </div>
+    <!-- Error -->
     <!-- foot -->
     <div class="flex mt-3 align-items-center justify-content-between">
       <Button label="Back" @click="prevPage()" icon="pi pi-angle-left"></Button>
@@ -80,17 +85,23 @@ export default {
   emits: ["prev-page", "next-page"],
   setup() {
     const { emit } = getCurrentInstance();
-    const display = ref(false);
     const address = ref("");
-    const postal = ref("");
-    const isNosearch = ref(false);
     const detailAddress = ref("");
+    const postal = ref("");
+
+    const display = ref(false);
+
+    const isNosearch = ref(false);
     const isNoDetail = ref(false);
+    const isEmpty = ref(false);
+
     const errorMsg = ref("");
     const searchAddress = () => {
       display.value = true;
       console.log("test");
     };
+
+    //카카오 맵에서 주소 선택 했을 경우
     const oncomplete = (response) => {
       console.log(response);
       if (response.userSelectedType === "R") {
@@ -101,7 +112,8 @@ export default {
       postal.value = response.zonecode;
       display.value = false;
     };
-    //페이지 이동
+
+    //다음 페이지 이동
     const nextPage = () => {
       if (!checkValidation()) {
         return;
@@ -116,28 +128,39 @@ export default {
         },
         pageIndex: 1,
       });
+      isNosearch.value = false;
+      isNoDetail.value = false;
+      isEmpty.value = false;
+      errorMsg.value = "";
     };
+
+    //이전 페이지로 이동
     const prevPage = () => {
       emit("prev-page", { pageIndex: 1 });
     };
+
+    //유효성 검증
     const checkValidation = () => {
-      //   if (address.value === "" || postal.value === "") {
-      //     isNosearch.value = true;
-      //     isNoDetail.value = false;
-      // errorMsg.value = constant.errorMsg.NODATA;
-      //     return false;
-      //   } else if (detailAddress.value === "") {
-      //     isNosearch.value = false;
-      //     isNoDetail.value = true;
-      // errorMsg.value = constant.errorMsg.NODATA;
-      //     return false;
-      //   }
+      if (address.value === "" || postal.value === "") {
+        isNosearch.value = true;
+        isNoDetail.value = false;
+        isEmpty.value = true;
+        errorMsg.value = constant.errorMsg.NODATA;
+        return false;
+      } else if (detailAddress.value === "") {
+        isNosearch.value = false;
+        isNoDetail.value = true;
+        isEmpty.value = true;
+        errorMsg.value = constant.errorMsg.NODATA;
+        return false;
+      }
       return true;
     };
     return {
       address,
       display,
       detailAddress,
+      isEmpty,
       errorMsg,
       isNosearch,
       isNoDetail,

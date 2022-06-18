@@ -7,7 +7,9 @@ export default {
     },
     errorMsg:{
         NODATA:'모든 입력 항목은 비어 있을 수 없습니다.',
-        NAMEERROR:'이름은 두글자 이상의 문자열 입니다.',
+        NAMEERROR:'이름은 두글자 이상 문자열 입니다.',
+        HBERROR: '신용카드는 16자리 숫자 입니다. 그리고 다음 3가지 형식만 허용 합니다.',
+        CARDNUMERROR: '유효하지 않는 카드번호 입니다.',
     },
     store: {
         theme: {

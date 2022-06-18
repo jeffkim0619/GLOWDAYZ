@@ -23,14 +23,24 @@
   <div>
     <Dialog
       header="최종입력 사항"
-      v-model:visible="display"
+      :visible="display"
       :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-      :style="{ width: '20vw' }"
+      :style="{ width: '30vw' }"
       :modal="true"
-      class=""
       :dismissableMask="true"
+      :closable="false"
     >
       {{ formObject }}
+      <template #footer>
+        <div class="flex justify-content-center align-items-center">
+          <Button
+            type="button"
+            label="닫기"
+            class="bg-indigolight w-2"
+            @click="closed"
+          />
+        </div>
+      </template>
     </Dialog>
   </div>
 </template>
@@ -66,23 +76,33 @@ export default {
     ]);
     let formObject = {};
 
+    //다음페이지 이동 (이전 페이지 값(변경 포함) 추가)
     const nextPage = (event) => {
       for (let field in event.formData) {
         formObject[field] = event.formData[field];
-        console.log(formObject[field]);
       }
       router.push(items.value[event.pageIndex + 1].to);
     };
+
+    //이전페이지 이동
     const prevPage = (event) => {
       router.push(items.value[event.pageIndex - 1].to);
     };
+
+    //최종값 모달 화면
     const complete = (event) => {
       for (let field in event.formData) {
         formObject[field] = event.formData[field];
       }
+      //로그 json 뷰티
       console.log(JSON.stringify(formObject, null, 4));
       display.value = true;
     };
+
+    //모달창 닫기 (전체 페이지 새로고침)
+    const closed = () => {
+      window.location.reload();
+    }
 
     return {
       items,
@@ -91,6 +111,7 @@ export default {
       nextPage,
       prevPage,
       complete,
+      closed,
     };
   },
 };
