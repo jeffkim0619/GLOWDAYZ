@@ -1,38 +1,54 @@
 <template>
   <div class="card">
-    <h5>Lazy Loading from a Remote Datasource (100000 Rows)</h5>
+    <h5>제품 정보</h5>
     <DataTable
       :value="products"
+      :sortField="sortRating"
+      :sortOrder="sortOrder"
+      v-model:filters="filters"
+      :defaultSortOrder="-1"
       scrollable
-      scrollHeight="400px"
+      scrollHeight="1000px"
       :virtualScrollerOptions="{
-        lazy: true,
-        onLazyLoad: loadCarsLazy,
         itemSize: 40,
         delay: 200,
         showLoader: true,
-        loading: lazyLoading,
-        numToleratedItems: 5,
       }"
     >
-      <Column field="idProduct" header="No." style="min-width: '200px'">
+      <template #header>
+        <TableHeader
+          :sortRatingAvg="sortRatingAvg"
+          :filterRatingAvg="filterRatingAvg"
+          @search="searchKeyword"
+          @initFilters="initFilter"
+        />
+      </template>
+      <template #empty> No Product found. </template>
+      <template #loading> Loading Product data. Please wait. </template>
+      <Column field="idProduct" header="No." style="min-width: '30px'">
         <template #loading>
           <div
             class="flex align-items-center"
             :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
           >
-            <Skeleton width="60%" height="1rem" />
+            <Skeleton width="20%" height="1rem" />
           </div>
         </template>
         <template #body="{ index }">
           {{ index + 1 }}
         </template>
       </Column>
-      <Column
-        field="productTitle"
-        header="ProductTitle"
-        style="min-width: '200px'"
-      >
+      <Column field="idProduct" header="제품고유ID" style="min-width: '50px'">
+        <template #loading>
+          <div
+            class="flex align-items-center"
+            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
+          >
+            <Skeleton width="20%" height="1rem" />
+          </div>
+        </template>
+      </Column>
+      <Column field="productTitle" header="제품명" style="min-width: '300px'">
         <template #loading>
           <div
             class="flex align-items-center"
@@ -42,7 +58,62 @@
           </div>
         </template>
       </Column>
-      <!-- <Column field="year" header="Year" style="min-width: '200px'">
+      <Column field="imageUrl" header="제품사진" style="min-width: '100px'">
+        <template #loading>
+          <div
+            class="flex align-items-center"
+            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
+          >
+            <Skeleton width="40%" height="1rem" />
+          </div>
+        </template>
+        <template #body="{ data }">
+          <img
+            :src="data.imageUrl"
+            :alt="data.productTitle"
+            style="width: 100px"
+          />
+        </template>
+      </Column>
+      <Column field="volume" header="제품용량" style="min-width: '50px'">
+        <template #loading>
+          <div
+            class="flex align-items-center"
+            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
+          >
+            <Skeleton width="20%" height="1rem" />
+          </div>
+        </template>
+        <template #body="{ data }">
+          {{ data.volume }}
+        </template>
+      </Column>
+      <Column
+        field="ratingAvg"
+        header="제품평점"
+        style="min-width: '260px'"
+        :sortable="true"
+      >
+        <template #loading>
+          <div
+            class="flex align-items-center"
+            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
+          >
+            <Skeleton width="60%" height="1rem" />
+          </div>
+        </template>
+        <template #body="{ data }">
+          <div class="tooltip">
+            <Rating
+              :modelValue="data.ratingAvg"
+              :readonly="true"
+              :cancel="false"
+            />
+            <span class="tooltiptext tooltip-bottom">{{ data.ratingAvg }}</span>
+          </div>
+        </template>
+      </Column>
+      <Column field="ratingStatus" header="제품평가" style="min-width: '100px'">
         <template #loading>
           <div
             class="flex align-items-center"
@@ -51,8 +122,39 @@
             <Skeleton width="30%" height="1rem" />
           </div>
         </template>
-      </Column> -->
-      <Column field="brand" header="Brand" style="min-width: '200px'">
+      </Column>
+      <Column field="reviewCount" header="평가자수" style="min-width: '100px'">
+        <template #loading>
+          <div
+            class="flex align-items-center"
+            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
+          >
+            <Skeleton width="30%" height="1rem" />
+          </div>
+        </template>
+        <template #body="{ data }">
+          {{ formatPrice(data.reviewCount) }}
+        </template>
+      </Column>
+      <Column field="price" header="제품가격" style="min-width: '100px'">
+        <template #loading>
+          <div
+            class="flex align-items-center"
+            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
+          >
+            <Skeleton width="30%" height="1rem" />
+          </div>
+        </template>
+        <template #body="{ data }">
+          {{
+            formatPrice(data.price) !== "정보없음"
+              ? formatPrice(data.price) + "원"
+              : formatPrice(data.price)
+          }}
+        </template>
+      </Column>
+
+      <Column field="brand" header="Brand" style="min-width: '100px'">
         <template #loading>
           <div
             class="flex align-items-center"
@@ -65,116 +167,7 @@
           {{ data.brand.brandTitle }}
         </template>
       </Column>
-      <!-- <Column field="color" header="Color" style="min-width: '200px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="60%" height="1rem" />
-          </div>
-        </template>
-      </Column> -->
     </DataTable>
-  </div>
-  <div class="card">
-    <DataView
-      :value="products"
-      :layout="layout"
-      :sortOrder="sortOrder"
-      :sortField="sortField"
-      :paginator="true" 
-      :rows="9"
-    >
-      <!-- :paginator="true"
-      :rows="9" -->
-      <template #header>
-        <div class="grid grid-nogutter">
-          <div class="col-6" style="text-align: left">
-            <Dropdown
-              v-model="sortKey"
-              :options="sortOptions"
-              optionLabel="label"
-              placeholder="Sort By ratingAvg"
-              @change="onSortChange($event)"
-            />
-          </div>
-          <div class="col-6" style="text-align: right">
-            <DataViewLayoutOptions v-model="layout" />
-          </div>
-        </div>
-      </template>
-
-      <template #list="slotProps">
-        <div class="col-6 col-offset-3">
-          <div class="product-list-item">
-            <img :src="slotProps.data.imageUrl" :alt="slotProps.data.productTitle" />
-            <div class="product-list-detail">
-              <div class="product-name">{{ slotProps.data.productTitle }}</div>
-              <div class="product-description">
-                용량 : {{ slotProps.data.volume }}
-              </div>
-              <i class="tooltip">
-                <Rating
-                  :modelValue="slotProps.data.ratingAvg"
-                  :readonly="true"
-                  :cancel="false"
-                />
-                <span class="tooltiptext tooltip-bottom">{{
-                  slotProps.data.ratingAvg
-                }}</span>
-              </i>
-              <i class="pi pi-tag product-category-icon"></i
-              ><span class="product-category">
-                <!-- {{ slotProps.data.category }} -->
-              </span>
-            </div>
-            <div class="product-list-action">
-              <span class="product-price">{{
-                formatPrice(slotProps.data.price)
-              }}</span>
-              <!-- <Button
-                icon="pi pi-shopping-cart"
-                label="Add to Cart"
-                :disabled="slotProps.idBrand === 'OUTOFSTOCK'"
-              ></Button>
-              <span
-                :class="
-                  'product-badge status-' +
-                  slotProps.data.inventoryStatus.toLowerCase()
-                "
-              > -->
-              <!-- {{ slotProps.data.inventoryStatus }} -->
-              <!-- </span> -->
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <template #grid="slotProps">
-				<div class="col-12 md:col-4">
-					<div class="product-grid-item card">
-						<div class="product-grid-item-top">
-							<div>
-								<i class="pi pi-tag product-category-icon"></i>
-								<span class="product-category">{{slotProps.data.category}}</span>
-							</div>
-							<span :class="'product-badge status-'+slotProps.data.rankChangeType.toLowerCase()">{{slotProps.data.rankChangeType}}</span>
-						</div>
-						<div class="product-grid-item-content">
-							<img :src="slotProps.data.imageUrl" :alt="slotProps.data.productTitle" style="width: 200px;"/>
-							<div class="product-name">{{slotProps.data.productTitle}}</div>
-							<div class="product-description">{{slotProps.data.description}}</div>
-							<Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false"></Rating>
-						</div>
-						<div class="product-grid-item-bottom">
-							<span class="product-price">{{formatPrice(slotProps.data.price)}}</span>
-							<Button icon="pi pi-shopping-cart" :disabled="slotProps.data.rankChangeType === 'OUTOFSTOCK'"></Button>
-						</div>
-					</div>
-				</div>
-			</template>
-    </DataView>
   </div>
 </template>
 
@@ -183,53 +176,53 @@ import { ref } from "vue";
 import api from "@/api/index.js";
 import constant from "@/common/constant.js";
 import BigNumber from "bignumber.js";
+import TableHeader from "@/components/Header.vue";
+import { FilterMatchMode, FilterOperator } from "primevue/api";
 
 export default {
   components: {
-    // VirtualScroller,
+    TableHeader,
   },
   setup() {
-    // onMounted(() => {
-    //   productService.value
-    //     .getProducts()
-    //     .then((data) => (products.value = data));
-    // });
-
-    const basicItems = ref(
-      Array.from({ length: 100000 }).map((_, i) => `Item #${i}`)
-    );
-    const products = ref();
-    // const productService = ref(new ProductService());
-    const layout = ref("grid");
-    const sortKey = ref();
-    const sortOrder = ref();
-    const sortField = ref();
+    const products = ref([]);
     const totalProduct = ref(0);
-    const sortOptions = ref([
-      { label: "ratingAvg High to Low", value: "!ratingAvg" },
-      { label: "ratingAvg Low to High", value: "ratingAvg" },
-    ]);
-    const onSortChange = (event) => {
-      console.log(event.value);
-      const value = event.value.value;
-      const sortValue = event.value;
+    const sortRating = ref("ratingAvg");
+    const sortOrder = ref(-1);
+    const sortRatingAvg = constant.data.SORTDATA;
+    const filterRatingAvg = constant.data.FILTERDATA;
+    const filters = ref({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      ratingStatus: {
+        operator: FilterOperator.OR,
+        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+      },
+      productTitle: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+    });
 
-      if (value.indexOf("!") === 0) {
-        sortOrder.value = -1;
-        sortField.value = value.substring(1, value.length);
-        sortKey.value = sortValue;
-      } else {
-        sortOrder.value = 1;
-        sortField.value = value;
-        sortKey.value = sortValue;
-      }
-    };
+    //api 연동 데이터 가져오기
     const getUrlData = async () => {
       let response = await api.get(constant.url.GETDATA);
-      products.value = await response.data.products;
+      let res = [];
       totalProduct.value = await response.data.products.length;
-      console.log(response.data.products);
+
+      //필터링 > 3점 이상 긍정, 이하 부정 처리
+      for (let i = 0; i < (await response.data.products.length); i++) {
+        let element = await response.data.products[i];
+        let data = {
+          ...element,
+          ratingStatus: element.ratingAvg > 3 ? "긍정적" : "부정적",
+        };
+        await res.push(data);
+      }
+      console.log(res);
+      products.value = await res;
     };
+    getUrlData();
+
+    //금액 포맷
     const formatPrice = (price) => {
       if (price === undefined) {
         return "정보없음";
@@ -237,52 +230,61 @@ export default {
       return new BigNumber(price).toFormat();
     };
 
-    const virtualCars = ref(Array.from({ length: totalProduct.value }));
-    const lazyLoading = ref(false);
-    const loadLazyTimeout = ref();
-
-    const loadCarsLazy = (event) => {
-      !lazyLoading.value && (lazyLoading.value = true);
-
-      if (loadLazyTimeout.value) {
-        clearTimeout(loadLazyTimeout.value);
+    //검색 기능
+    const searchKeyword = (searchKey) => {
+      switch (searchKey.no) {
+        case 0:
+          sortOrder.value = searchKey.sort;
+          break;
+        case 1:
+          filters.value["ratingStatus"].constraints[0].value =
+            searchKey.filter === "all" ? null : searchKey.filter;
+          break;
+        case 2:
+          console.log("gds");
+          filters.value["productTitle"].constraints[0].value =
+            searchKey.keywords;
+          console.log(
+            "gds",
+            filters.value["productTitle"].constraints[0].value
+          );
+          break;
+        default:
+          break;
       }
-
-      //simulate remote connection with a timeout
-      loadLazyTimeout.value = setTimeout(() => {
-        let _virtualCars = [...virtualCars.value];
-        let { first, last } = event;
-
-        //load data of required page
-        const loadedCars = products.value.slice(first, last);
-
-        //populate page of virtual cars
-        Array.prototype.splice.apply(_virtualCars, [
-          ...[first, last - first],
-          ...loadedCars,
-        ]);
-
-        virtualCars.value = _virtualCars;
-        lazyLoading.value = false;
-
-        console.log(virtualCars.value);
-
-        // }, Math.random() * 1000 + 250);
-      }, 2000);
+      console.log(searchKey);
+      // sortOrder.value = 1;
     };
-    getUrlData();
+
+    //검색 초기화
+    const initFilter = () => {
+      filters.value = {
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        ratingStatus: {
+          operator: FilterOperator.AND,
+          constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+        },
+        productTitle: {
+          operator: FilterOperator.AND,
+          constraints: [
+            { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+          ],
+        },
+      };
+      sortOrder.value = -1;
+      getUrlData();
+    };
+
     return {
       products,
-      layout,
-      sortKey,
+      sortRating,
       sortOrder,
-      sortField,
-      sortOptions,
-      onSortChange,
-      basicItems,
+      sortRatingAvg,
+      filterRatingAvg,
+      filters,
       formatPrice,
-      loadCarsLazy,
-      lazyLoading,
+      searchKeyword,
+      initFilter,
     };
   },
 };
@@ -326,131 +328,5 @@ export default {
   left: 45%;
   margin-left: -5px;
   border-color: transparent transparent black transparent;
-}
-.card {
-  background: #ffffff;
-  padding: 2rem;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
-  margin-bottom: 2rem;
-}
-.p-dropdown {
-  width: 14rem;
-  font-weight: normal;
-}
-
-.product-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.product-description {
-  margin: 0 0 1rem 0;
-}
-
-.product-category-icon {
-  vertical-align: middle;
-  margin-right: 0.5rem;
-}
-
-.product-category {
-  font-weight: 600;
-  vertical-align: middle;
-}
-
-::v-deep(.product-list-item) {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  width: 100%;
-
-  img {
-    width: 50px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    margin-right: 2rem;
-  }
-
-  .product-list-detail {
-    flex: 1 1 0;
-  }
-
-  .p-rating {
-    margin: 0 0 0.5rem 0;
-  }
-
-  .product-price {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    align-self: flex-end;
-  }
-
-  .product-list-action {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .p-button {
-    margin-bottom: 0.5rem;
-  }
-}
-
-::v-deep(.product-grid-item) {
-  margin: 0.5rem;
-  border: 1px solid var(--surface-border);
-
-  .product-grid-item-top,
-  .product-grid-item-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  img {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    margin: 2rem 0;
-  }
-
-  .product-grid-item-content {
-    text-align: center;
-  }
-
-  .product-price {
-    font-size: 1.5rem;
-    font-weight: 600;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .product-list-item {
-    flex-direction: column;
-    align-items: center;
-
-    img {
-      margin: 2rem 0;
-    }
-
-    .product-list-detail {
-      text-align: center;
-    }
-
-    .product-price {
-      align-self: center;
-    }
-
-    .product-list-action {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .product-list-action {
-      margin-top: 2rem;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-  }
 }
 </style>
