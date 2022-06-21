@@ -122,9 +122,6 @@ export default {
           }
           break;
       }
-      // if (checkName()) {
-      //   document.getElementById(next).focus();
-      // }
     };
 
     //페이지 이동
@@ -153,8 +150,7 @@ export default {
     const checkValidation = () => {
       //정규식 정리
       const reg_email =
-        /^[0-9a-zA-Z]([\W]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-
+        /\w+([-+.]\w+)*@\w+([-.]\w+)*\.[a-zA-Z]{2,4}$/;
       //검증
       if (!checkName()) {
         return false;

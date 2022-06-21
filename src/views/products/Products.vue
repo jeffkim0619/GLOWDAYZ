@@ -7,13 +7,8 @@
       :sortOrder="sortOrder"
       v-model:filters="filters"
       :defaultSortOrder="-1"
-      scrollable
-      scrollHeight="1000px"
-      :virtualScrollerOptions="{
-        itemSize: 40,
-        delay: 200,
-        showLoader: true,
-      }"
+      :rowHover="true"
+      showGridlines
     >
       <template #header>
         <TableHeader
@@ -25,48 +20,93 @@
       </template>
       <template #empty> No Product found. </template>
       <template #loading> Loading Product data. Please wait. </template>
-      <Column field="idProduct" header="No." style="min-width: '30px'">
+
+      <ColumnGroup type="header">
+        <Row>
+          <Column
+            header="No."
+            field="no"
+            :rowspan="2"
+            headerStyle="width: 5%"
+          />
+          <Column
+            header="제품고유ID"
+            field="idProduct"
+            :rowspan="2"
+            headerStyle="width: 10%"
+          />
+          <Column
+            header="제품명"
+            field="productTitle"
+            :rowspan="2"
+            headerStyle="width: 10%"
+          />
+          <Column
+            header="제품사진"
+            field="imageUrl"
+            :rowspan="2"
+            headerStyle="width: 10%"
+          />
+          <Column
+            header="제품용량"
+            field="volume"
+            :rowspan="2"
+            headerStyle="width: 5%"
+          />
+          <Column
+            header="제품평점"
+            field="ratingAvg"
+            :rowspan="2"
+            headerStyle="width: 10%"
+          />
+          <Column
+            header="제품평가"
+            field="ratingStatus"
+            :rowspan="2"
+            headerStyle="width: 10%"
+          />
+          <Column
+            header="평가자수"
+            field="reviewCount"
+            :rowspan="2"
+            headerStyle="width: 10%"
+          />
+          <Column
+            header="제품가격"
+            field="price"
+            :rowspan="2"
+            headerStyle="width: 10%"
+          />
+          <Column header="브랜드정보" :colspan="2" />
+        </Row>
+        <Row>
+          <Column header="브랜드명" field="brand" headerStyle="width: 10%" />
+          <Column
+            header="브랜드사진"
+            field="brandImg"
+            headerStyle="width: 10%"
+          />
+        </Row>
+      </ColumnGroup>
+      <Column field="no" bodyStyle="text-align:center">
         <template #loading>
           <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
+            :style="{
+              height: '17px',
+              'flex-grow': '1',
+              overflow: 'hidden',
+            }"
           >
-            <Skeleton width="20%" height="1rem" />
+            <Skeleton width="50%" height="1rem" />
           </div>
         </template>
         <template #body="{ index }">
-          {{ index + 1 }}
+          <span>{{ index + 1 }}</span>
         </template>
       </Column>
-      <Column field="idProduct" header="제품고유ID" style="min-width: '50px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="20%" height="1rem" />
-          </div>
-        </template>
-      </Column>
-      <Column field="productTitle" header="제품명" style="min-width: '300px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="40%" height="1rem" />
-          </div>
-        </template>
-      </Column>
-      <Column field="imageUrl" header="제품사진" style="min-width: '100px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="40%" height="1rem" />
-          </div>
-        </template>
+      <Column field="idProduct" bodyStyle="text-align:center" />
+      <Column field="productTitle" bodyStyle="text-align:center" />
+      <Column field="imageUrl" bodyStyle="text-align:center">
         <template #body="{ data }">
           <img
             :src="data.imageUrl"
@@ -75,33 +115,8 @@
           />
         </template>
       </Column>
-      <Column field="volume" header="제품용량" style="min-width: '50px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="20%" height="1rem" />
-          </div>
-        </template>
-        <template #body="{ data }">
-          {{ data.volume }}
-        </template>
-      </Column>
-      <Column
-        field="ratingAvg"
-        header="제품평점"
-        style="min-width: '260px'"
-        :sortable="true"
-      >
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="60%" height="1rem" />
-          </div>
-        </template>
+      <Column field="volume" bodyStyle="text-align:end" />
+      <Column field="ratingAvg" bodyStyle="text-align:center">
         <template #body="{ data }">
           <div class="tooltip">
             <Rating
@@ -113,58 +128,40 @@
           </div>
         </template>
       </Column>
-      <Column field="ratingStatus" header="제품평가" style="min-width: '100px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="30%" height="1rem" />
-          </div>
-        </template>
-      </Column>
-      <Column field="reviewCount" header="평가자수" style="min-width: '100px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="30%" height="1rem" />
-          </div>
-        </template>
+      <Column field="ratingStatus" bodyStyle="text-align:center">
         <template #body="{ data }">
-          {{ formatPrice(data.reviewCount) }}
+          <Badge
+            :value="data.ratingStatus"
+            :severity="data.ratingStatus === '긍정적' ? 'success' : 'danger'"
+          ></Badge>
         </template>
       </Column>
-      <Column field="price" header="제품가격" style="min-width: '100px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="30%" height="1rem" />
-          </div>
+      <Column field="reviewCount" bodyStyle="text-align:end">
+        <template #body="{ data }">
+          {{ formatPrice(data.reviewCount) + " 명" }}
         </template>
+      </Column>
+      <Column field="price" bodyStyle="text-align:end">
         <template #body="{ data }">
           {{
-            formatPrice(data.price) !== "정보없음"
-              ? formatPrice(data.price) + "원"
-              : formatPrice(data.price)
+            formatPrice(data.price) === "정보없음"
+              ? formatPrice(data.price)
+              : formatPrice(data.price) + "원"
           }}
         </template>
       </Column>
-
-      <Column field="brand" header="Brand" style="min-width: '100px'">
-        <template #loading>
-          <div
-            class="flex align-items-center"
-            :style="{ height: '17px', 'flex-grow': '1', overflow: 'hidden' }"
-          >
-            <Skeleton width="40%" height="1rem" />
-          </div>
-        </template>
+      <Column field="brand" bodyStyle="text-align:center">
         <template #body="{ data }">
           {{ data.brand.brandTitle }}
+        </template>
+      </Column>
+      <Column field="brandImg" bodyStyle="text-align:center">
+        <template #body="{ data }">
+          <img
+            :src="data.brand.imageUrl"
+            :alt="data.productTitle"
+            style="width: 100px"
+          />
         </template>
       </Column>
     </DataTable>
@@ -204,21 +201,24 @@ export default {
 
     //api 연동 데이터 가져오기
     const getUrlData = async () => {
-      let response = await api.get(constant.url.GETDATA);
-      let res = [];
-      totalProduct.value = await response.data.products.length;
+      try {
+        let response = await api.get(constant.url.GETDATA);
+        let res = [];
+        totalProduct.value = await response.data.products.length;
 
-      //필터링 > 3점 이상 긍정, 이하 부정 처리
-      for (let i = 0; i < (await response.data.products.length); i++) {
-        let element = await response.data.products[i];
-        let data = {
-          ...element,
-          ratingStatus: element.ratingAvg > 3 ? "긍정적" : "부정적",
-        };
-        await res.push(data);
+        //필터링 > 3점 이상 긍정, 이하 부정 처리
+        for (let i = 0; i < 10; i++) {
+          let element = await response.data.products[i];
+          let data = {
+            ...element,
+            ratingStatus: element.ratingAvg > 3 ? "긍정적" : "부정적",
+          };
+          await res.push(data);
+        }
+        products.value = await res;
+      } catch (error) {
+        console.log(error);
       }
-      console.log(res);
-      products.value = await res;
     };
     getUrlData();
 
@@ -232,6 +232,7 @@ export default {
 
     //검색 기능
     const searchKeyword = (searchKey) => {
+      getUrlData();
       switch (searchKey.no) {
         case 0:
           sortOrder.value = searchKey.sort;
@@ -252,8 +253,6 @@ export default {
         default:
           break;
       }
-      console.log(searchKey);
-      // sortOrder.value = 1;
     };
 
     //검색 초기화
@@ -273,6 +272,40 @@ export default {
       };
       sortOrder.value = -1;
       getUrlData();
+    };
+
+    //인피니트 스크롤 부분
+    document.addEventListener("scroll", async (e) => {
+      const { scrollTop } = e.target.scrollingElement;
+      //스크롤 밑바닥 체크
+      let bottom =
+        document.documentElement.scrollHeight -
+        document.documentElement.offsetHeight;
+      let response = await api.get(constant.url.GETDATA);
+      //스크롤 bottom 도착 하면 값 10개 추가 호출
+      if (
+        scrollTop === bottom &&
+        products.value.length < (await response.data.products.length)
+      ) {
+        await getMoreData(response);
+      }
+    });
+
+    const getMoreData = async (response) => {
+      let index = products.value.length;
+      let total =
+        products.value.length / 10 + 1 <
+        (await response.data.products.length) / 10
+          ? products.value.length + 10
+          : await response.data.products.length;
+      for (let i = index; i < total; i++) {
+        let element = await response.data.products[i];
+        let data = {
+          ...element,
+          ratingStatus: element.ratingAvg > 3 ? "긍정적" : "부정적",
+        };
+        await products.value.push(data);
+      }
     };
 
     return {
