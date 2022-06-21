@@ -1,5 +1,7 @@
 <template>
-  
+  <div class="card">
+    NotFound
+  </div>
 </template>
 
 <script>

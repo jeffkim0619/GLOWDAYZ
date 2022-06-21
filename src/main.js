@@ -106,6 +106,8 @@ const app = createApp(App);
                 next({ path: '/userInfomation/detail' });
                 return;
             }
+        } else if ((to.href === '#/')){
+            next({ path: '/userInfomation/detail' });
         }
         next();
     });

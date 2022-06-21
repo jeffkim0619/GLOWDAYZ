@@ -37,8 +37,6 @@ npm run build
 │  ├─common                       - 프로젝트 공통
 │  │ └─contants.js                - 상수 파일
 │  ├─components                   - 공통 사용 컴포넌트
-│  │  ├─popup                     - 팝업 컴포넌트
-│  │  └─table                     - 테이블 컴포넌트
 │  ├─router                       - 화면이동 파일
 │  ├─store                        - vuex 모듈
 │  │  └─modules

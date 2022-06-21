@@ -21,7 +21,6 @@
 import { getCurrentInstance, ref } from "vue";
 import { themesToggle } from "@/common/toggleTheme.js";
 import { menuOnClick } from "@/common/sideNavService.js";
-// import router from "@/router";
 export default {
   setup() {
     const op = ref();
