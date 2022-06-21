@@ -281,13 +281,11 @@ export default {
       let bottom =
         document.documentElement.scrollHeight -
         document.documentElement.offsetHeight;
-      let response = await api.get(constant.url.GETDATA);
       //스크롤 bottom 도착 하면 값 10개 추가 호출
-      if (
-        scrollTop === bottom &&
-        products.value.length < (await response.data.products.length)
-      ) {
-        await getMoreData(response);
+      if (scrollTop === bottom) {
+        let response = await api.get(constant.url.GETDATA);
+        if (products.value.length < (await response.data.products.length))
+          await getMoreData(response);
       }
     });
 
